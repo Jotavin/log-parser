@@ -1,6 +1,9 @@
 import re
-from src.player import Player
-from src.game import Game
+from models.player import Player
+from models.game import Game
+from models.utils.patterns import Pattern
+
+p = Pattern()
 
 
 def name(player_name) -> str:
@@ -8,12 +11,13 @@ def name(player_name) -> str:
     match = re.search(regex, player_name)
     return match.group(1)
 
-def find_player(data) -> str:
-    info = data
-    player_name = name(info)
-    return player_name
+# def find_player(data) -> str:
+#     info = data
+#     player_name = name(info)
+#     return player_name
 
 path = r'qgames.log'
+path = r'C:\Users\n7499\projects\log-challenge\log_challenge\qgames.log'
 with open(path, 'r') as file:
     logs_file = file.readlines()
 
@@ -22,7 +26,7 @@ end_index = None
 
 jogos = []
 
-
+#compilo
 connect_player_pattern = re.compile(r'ClientUserinfoChanged: \d n\\(.*?)\\')
 killer_pattern = re.compile(r':\s([^:]+)\skilled\s(.*?)\sby\s[a-zA-Z_]+')
 # killer = re.compile(r'(?<=:\s)(.*?)(?=\skilled)')
@@ -44,10 +48,10 @@ for index, line in enumerate(logs_file):
         players = {}
 
         for line in range(start_index+1, end_index):
-            
-            match_connection = connect_player_pattern.search(logs_file[line])
-            if match_connection:
-                player_name = find_player(match_connection.group())
+
+            if p.is_player_connected(logs_file[index]):
+
+                player_name = p.name()
                 if player_name not in players:
                     players[player_name] = Player(player_name)
 
@@ -57,11 +61,11 @@ for index, line in enumerate(logs_file):
                 worlds_kill = world_killer_pattern.search(logs_file[line]).group(1)
 
 
-                if '<world>' == killer:
-                    players[worlds_kill].subtract_kill()
+                # if '<world>' == killer:
+                #     players[worlds_kill].subtract_kill()
 
-                else:
-                    players[killer].add_kill()
+                # else:
+                #     players[killer].add_kill()
 
         start_index = None
 
@@ -79,8 +83,8 @@ for index, line in enumerate(logs_file):
 
 
 
-print(game.get_game_info())
-print(games)
+# print(current_game.get_game_info())
+# print(games)
 for game in games:
     print(game.get_game_info())
 
