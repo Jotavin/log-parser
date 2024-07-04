@@ -5,17 +5,6 @@ from models.utils.pattern import Pattern
 
 p = Pattern()
 
-
-def name(player_name) -> str:
-    regex = r'(?<=n\\)(.*)(?=\\)'
-    match = re.search(regex, player_name)
-    return match.group(1)
-
-# def find_player(data) -> str:
-#     info = data
-#     player_name = name(info)
-#     return player_name
-
 path = r'qgames.log'
 path = r'C:\Users\n7499\projects\log-challenge\log_challenge\qgames.log'
 with open(path, 'r') as file:
@@ -24,19 +13,8 @@ with open(path, 'r') as file:
 start_index = None
 end_index = None
 
-jogos = []
-
-#compilo
-connect_player_pattern = re.compile(r'ClientUserinfoChanged: \d n\\(.*?)\\')
-killer_pattern = re.compile(r':\s([^:]+)\skilled\s(.*?)\sby\s[a-zA-Z_]+')
-# killer = re.compile(r'(?<=:\s)(.*?)(?=\skilled)')
-# kill_player_pattern = re.compile(r': ([\w\s]+) killed')
-# kill_player_pattern = re.compile(r'(\S+? killed \S+)|((<world>|\w+( \w+)*) killed (\w+( \w+)*))')
-world_killer_pattern = re.compile(r'killed (.+?) by')
-
 games = []
 
-total_kills = []
 for index, line in enumerate(logs_file):
     if 'InitGame' in line:
 
@@ -57,11 +35,11 @@ for index, line in enumerate(logs_file):
 
             if 'Kill:' in logs_file[line]:
                 match_kills += 1
-                killer = killer_pattern.search(logs_file[line]).group(1)
-                worlds_kill = world_killer_pattern.search(logs_file[line]).group(1)
+                killer = p.get_killer(logs_file[line])
 
 
                 if '<world>' == killer:
+                    worlds_kill = p.get_killed_by_world(logs_file[line])
                     players[worlds_kill].subtract_kill()
 
                 else:
@@ -69,22 +47,19 @@ for index, line in enumerate(logs_file):
 
         start_index = None
 
-
-
-
         current_game = Game()
         current_game.set_total_kills(match_kills)
         current_game.add_players(players)
 
         games.append(current_game)
 
-        total_kills.append(match_kills)
 
 
 
 
-# print(current_game.get_game_info())
-# print(games)
+
+
+
 for game in games:
     print(game.get_game_info())
 
