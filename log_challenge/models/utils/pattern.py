@@ -13,7 +13,7 @@ class Pattern:
 
         self.world_kill_pattern = re.compile(r'killed (.+?) by')
 
-
+        self.mean_death_pattern = re.compile(r'by (.+)$')
 
     
     def get_name(self):
@@ -22,8 +22,7 @@ class Pattern:
 
     def is_player_connected(self, line):
         match = self.connect_player_pattern.search(line)
-
-
+        
         if match:
             self.current_player = match.group(1)
             return match
@@ -40,6 +39,10 @@ class Pattern:
         match = self.world_kill_pattern.search(line)
         if match:
             return match.group(1)
-        
+    
+    def get_mean_death(self, line):
+        match = self.mean_death_pattern.search(line)
+        if match:
+            return match.group(1)
 
 
