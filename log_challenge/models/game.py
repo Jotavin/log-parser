@@ -1,9 +1,11 @@
 class Game:
-
+    game_index = 0
     def __init__(self) -> None:
         self.total_kills = 0
         self.players = []
         self.kills = {}
+        Game.game_index += 1
+        self.index = Game.game_index
 
     def __str__(self) -> str:
         return f'{self.game}'
@@ -22,7 +24,4 @@ class Game:
         return [player.name for player in self.players]
 
     def get_game_info(self):
-        return {'total_kills':self.total_kills, 'players': self.get_players_name(), 'kills': self.get_players_match()}
-
-    # def get_game_info(self):
-    #     return {game.player: game.player_kills for game in self.player}
+        return {f'game_{self.index}':{'total_kills':self.total_kills, 'players': self.get_players_name(), 'kills': self.get_players_match()}}
