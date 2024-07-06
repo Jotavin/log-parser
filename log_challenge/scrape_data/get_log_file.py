@@ -10,5 +10,5 @@ html_content = soup.find('table', 'highlight tab-size js-file-line-container js-
 
 raw_text = html_content.getText(separator='\n', strip=True)
 
-with open('log_file.txt', 'w', encoding='utf-8') as file:
+with open('quake_info.txt', 'w', encoding='utf-8') as file:
     file.write(raw_text)
