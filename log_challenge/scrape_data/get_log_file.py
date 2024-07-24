@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as bs
 
-url = 'https://gist.github.com/cloudwalk-tests/be1b636e58abff14088c8b5309f575d8'
+
+url = 'URL'
 response = requests.get(url)
 
 
